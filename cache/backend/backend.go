@@ -80,10 +80,15 @@ func InitializeS3Backend(c S3Config, debug bool) (cache.Backend, error) {
 
 // InitializeAzureBlobBackend creates an Azure Blob backend
 func IntializeAzureBlobBackend(c AzureBlobConfig, debug bool) (cache.Backend, error) {
-	if c.AccountName != "" && c.AccountKey != "" && c.ContainerName != "" {
+	if c.AccountName != "" && c.AccountKey != "" {
+		credential, err := azblob.NewSharedKeyCredential(c.AccountName, c.AccountKey)
 
+		p := azblob.NewPipeline(credential, azblob.PipelineOptions{})
+		u, _ := url.Parse(fmt.Sprintf("https://%s.blob.core.windows.net", c.AccountName))
+		serviceURL := azblob.NewServiceURL(*u, p)
+}
 	} else {
-		log.Println("azure blob account name, key, and/or container name not provided")
+		log.Println("azure blob account name and/or key not provided")
 	}
 	if debug {
 		log.Printf("[DEBUG] azure backend config: ", c)
