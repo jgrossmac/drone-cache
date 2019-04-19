@@ -1,6 +1,7 @@
 module github.com/meltwater/drone-cache
 
 require (
+	github.com/Azure/azure-storage-blob-go v0.6.0
 	github.com/aws/aws-sdk-go v1.16.35
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-ini/ini v1.41.0 // indirect

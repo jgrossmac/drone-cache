@@ -43,6 +43,13 @@ type S3Config struct {
 	PathStyle bool // Use path style instead of domain style. Should be true for minio and false for AWS
 }
 
+// AzureBlobConfig is a structure to storage AzureBlob backend configuration
+type AzureBlobConfig struct {
+	AccountName   string
+	AccountKey    string
+	ContainerName string
+}
+
 // FileSystemConfig is a structure to store filesystem backend configuration
 type FileSystemConfig struct {
 	CacheRoot string
@@ -69,6 +76,20 @@ func InitializeS3Backend(c S3Config, debug bool) (cache.Backend, error) {
 	}
 
 	return newS3(c.Bucket, c.ACL, c.Encryption, awsConf), nil
+}
+
+// InitializeAzureBlobBackend creates an Azure Blob backend
+func IntializeAzureBlobBackend(c AzureBlobConfig, debug bool) (cache.Backend, error) {
+	if c.AccountName != "" && c.AccountKey != "" && c.ContainerName != "" {
+
+	} else {
+		log.Println("azure blob account name, key, and/or container name not provided")
+	}
+	if debug {
+		log.Printf("[DEBUG] azure backend config: ", c)
+	}
+
+	return newAzureBlob(c.AccountName, c.AccountKey, c.ContainerName), nil
 }
 
 // InitializeFileSystemBackend creates a filesystem backend

@@ -188,7 +188,7 @@ func main() {
 
 		cli.StringFlag{
 			Name:   "backend, b",
-			Usage:  "cache backend to use in plugin (s3, filesystem)",
+			Usage:  "cache backend to use in plugin (s3, filesystem, azureblob)",
 			Value:  "s3",
 			EnvVar: "PLUGIN_BACKEND",
 		},
@@ -277,6 +277,24 @@ func main() {
 			Usage:  "server-side encryption algorithm, defaults to none. (AES256, aws:kms)",
 			EnvVar: "PLUGIN_ENCRYPTION",
 		},
+
+		// Azure Blob specific Config args
+
+		cli.StringFlag{
+			Name:   "account-name, aname",
+			Usage:  "endpoint for the s3 connection",
+			EnvVar: "PLUGIN_ENDPOINT,S3_ENDPOINT",
+		},
+		cli.StringFlag{
+			Name:   "account-key, akey",
+			Usage:  "endpoint for the s3 connection",
+			EnvVar: "PLUGIN_ENDPOINT,S3_ENDPOINT",
+		},
+		cli.StringFlag{
+			Name:   "container-name, cname",
+			Usage:  "endpoint for the s3 connection",
+			EnvVar: "PLUGIN_ENDPOINT,S3_ENDPOINT",
+		},
 	}
 
 	if err := app.Run(os.Args); err != nil {
@@ -341,6 +359,11 @@ func run(c *cli.Context) error {
 				PathStyle:  c.Bool("path-style"),
 				Region:     c.String("region"),
 				Secret:     c.String("secret-key"),
+			},
+			AzureBlob: backend.AzureBlobConfig{
+				AccountName:   c.String("account-name"),
+				AccountKey:    c.String("account-key"),
+				ContainerName: c.String("container-name"),
 			},
 		},
 	}
