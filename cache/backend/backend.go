@@ -82,9 +82,23 @@ func InitializeS3Backend(c S3Config, debug bool) (cache.Backend, error) {
 func IntializeAzureBlobBackend(c AzureBlobConfig, debug bool) (cache.Backend, error) {
 	if c.AccountName != "" && c.AccountKey != "" {
 		credential, err := azblob.NewSharedKeyCredential(c.AccountName, c.AccountKey)
+		
+		if err != nil {	
+			return nil, err	
+		}
 
-		p := azblob.NewPipeline(credential, azblob.PipelineOptions{})
-		u, _ := url.Parse(fmt.Sprintf("https://%s.blob.core.windows.net", c.AccountName))
+		p, err := azblob.NewPipeline(credential, azblob.PipelineOptions{})
+
+		if err != nil {	
+			return nil, err	
+		}
+		
+		u, err := url.Parse(fmt.Sprintf("https://%s.blob.core.windows.net", c.AccountName))
+		
+		if err != nil {	
+			return nil, err	
+		}
+
 		serviceURL := azblob.NewServiceURL(*u, p)
 }
 	} else {
